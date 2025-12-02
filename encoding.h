@@ -17,9 +17,15 @@ struct Float32
 
     void print() const 
     {
+        std::cout << "print as uint" << std::endl;
         std::cout << "sign: " << sign << std::endl;
         std::cout << "exponent: " << exponent << std::endl;
         std::cout << "mantissa: " << mantissa << std::endl;
+
+        std::cout << "print as binary" << std::endl;
+        print_binary(exponent << 24, 8);
+        print_binary(mantissa << 9, 23);
+        std::cout << std::endl;
     }
 };
 
