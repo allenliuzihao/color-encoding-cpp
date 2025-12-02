@@ -9,10 +9,27 @@ struct Float32
     float value() const
     {
         float signValue = sign == 1 ? -1.f : 1.f;
-        float m = 1.0f + std::ldexpf(float(mantissa), -23);
+        if (exponent == 0xff)
+        {
+            if (mantissa == 0)
+            {
+                return signValue * float(0x7f800000);
+            }
+            else
+            {
+                return float(0x7f800001);
+            }
+        }
+        else if (exponent == 0)
+        {
+            float frac = std::ldexpf(float(mantissa), -23);
+            float scale = std::ldexpf(1.f, -126);
+            return signValue * frac * scale;
+        }
+
+        float frac = 1.0f + std::ldexpf(float(mantissa), -23);
         float scale = std::ldexpf(1.f, exponent - 127); // 2 ^ (exponent - 127)
-        float frac = signValue * m * scale;
-        return frac;
+        return signValue * frac * scale;
     }
 
     void print() const 

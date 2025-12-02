@@ -18,6 +18,9 @@ void test_float32_encoding()
 
     parsedFloat = parse_float32(0.15625);
     parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 124 && parsedFloat.mantissa == 2097152);
+
+
 }
 
 int main() 
