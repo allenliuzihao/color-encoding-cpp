@@ -1,5 +1,10 @@
 #include "pch.h"
 
+uint32_t asuint(float x)
+{
+    return std::bit_cast<uint32_t>(x);
+}
+
 void print_binary(uint32_t input) 
 {
     uint32_t curr = input;
@@ -10,4 +15,11 @@ void print_binary(uint32_t input)
         curr = curr << 1;
     }
     std::cout << std::endl;
+}
+
+void print_float32(float input)
+{
+    
+
+
 }
