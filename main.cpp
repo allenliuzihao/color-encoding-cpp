@@ -22,6 +22,23 @@ void test_float32_encoding()
 
     parsedFloat = parse_float32(powf(2.0f, -149));
     parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1);
+
+    parsedFloat = parse_float32(0);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0);
+
+    parsedFloat = parse_float32(asfloat(0x7f800000));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 0);
+
+    parsedFloat = parse_float32(asfloat(0xff800000));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 1 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 0);
+
+    parsedFloat = parse_float32(asfloat(0x7f800001));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 1);
 }
 
 int main() 

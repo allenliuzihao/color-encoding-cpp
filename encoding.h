@@ -13,21 +13,21 @@ struct Float32
         {
             if (mantissa == 0)
             {
-                return signValue * float(0x7f800000);
+                return signValue * asfloat(0x7f800000);
             }
             else
             {
-                return float(0x7f800001);
+                return asfloat(0x7f800001);
             }
         }
         else if (exponent == 0)
         {
-            float frac = std::ldexpf(float(mantissa), -23);
+            float frac = std::ldexpf(asfloat(mantissa), -23);
             float scale = std::ldexpf(1.f, -126);
             return signValue * frac * scale;
         }
 
-        float frac = 1.0f + std::ldexpf(float(mantissa), -23);
+        float frac = 1.0f + std::ldexpf(asfloat(mantissa), -23);
         float scale = std::ldexpf(1.f, exponent - 127); // 2 ^ (exponent - 127)
         return signValue * frac * scale;
     }
