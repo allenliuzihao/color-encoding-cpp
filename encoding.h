@@ -1,5 +1,8 @@
 #pragma once
 
+void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mantissa);
+float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa);
+
 struct Float32
 {
     uint32_t sign : 1;
@@ -8,28 +11,7 @@ struct Float32
 
     float value() const
     {
-        float signValue = sign == 1 ? -1.f : 1.f;
-        if (exponent == 0xff)
-        {
-            if (mantissa == 0)
-            {
-                return signValue * asfloat(0x7f800000);
-            }
-            else
-            {
-                return asfloat(0x7f800001);
-            }
-        }
-        else if (exponent == 0)
-        {
-            float frac = std::ldexpf(float(mantissa), -23);
-            float scale = std::ldexpf(1.f, -126);
-            return signValue * frac * scale;
-        }
-
-        float frac = 1.0f + std::ldexpf(float(mantissa), -23);
-        float scale = std::ldexpf(1.f, exponent - 127); // 2 ^ (exponent - 127)
-        return signValue * frac * scale;
+        return compute_value(sign, exponent, mantissa);
     }
 
     void print() const 
@@ -46,6 +28,14 @@ struct Float32
         print_binary(mantissa << 9, 23);
         std::cout << std::endl;
     }
+
+    Float32(float input)
+    {
+        uint32_t sign, exponent, mantissa;
+        parse_float(input, sign, exponent, mantissa);
+        this->sign = sign;
+        this->exponent = exponent;
+        this->mantissa = mantissa;
+    }
 };
 
-Float32 parse_float32(float input);

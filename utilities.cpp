@@ -13,7 +13,7 @@ float asfloat(uint32_t x)
 void print_binary(uint32_t input, uint32_t num_bits) 
 {
     uint32_t curr = input;
-    for (int i = 0; i < num_bits; ++i)
+    for (uint32_t i = 0; i < num_bits; ++i)
     {
         bool isOne = (curr & 0x80000000) == 0x80000000;
         std::cout << isOne;
