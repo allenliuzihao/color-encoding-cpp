@@ -10,13 +10,15 @@ struct Float32
     {
         float signValue = sign == 1 ? -1.f : 1.f;
         float m = 1.0f + std::ldexpf(float(mantissa), -23);
-        float scale = std::ldexpf(2.f, exponent - 127);
+        float scale = std::ldexpf(1.f, exponent - 127); // 2 ^ (exponent - 127)
         float frac = signValue * m * scale;
         return frac;
     }
 
     void print() const 
     {
+        std::cout << "value: " << value() << std::endl;
+
         std::cout << "print as uint" << std::endl;
         std::cout << "sign: " << sign << std::endl;
         std::cout << "exponent: " << exponent << std::endl;
