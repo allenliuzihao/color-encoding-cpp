@@ -39,6 +39,10 @@ void test_float32_encoding()
     parsedFloat = parse_float32(asfloat(0x7f800001));
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 1);
+
+    parsedFloat = parse_float32(12.375);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 130 && parsedFloat.mantissa == 4587520);
 }
 
 int main() 
