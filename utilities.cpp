@@ -3,11 +3,11 @@
 void print_binary(uint32_t input) 
 {
     uint32_t curr = input;
-    while (curr != 0) 
+    for (int i = 0; i < 32; ++i)
     {
-        bool isOne = (curr & 0x1) == 0x1;
+        bool isOne = (curr & 0x80000000) == 0x80000000;
         std::cout << isOne;
-        curr = curr >> 1;
+        curr = curr << 1;
     }
     std::cout << std::endl;
 }
