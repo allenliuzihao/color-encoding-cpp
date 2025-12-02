@@ -1,5 +1,6 @@
 #include "pch.h"
 
-int main() {
-
+int main() 
+{
+    print_binary(0x07804000);
 }
