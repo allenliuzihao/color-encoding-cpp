@@ -101,9 +101,9 @@ void Float32::print() const
     std::cout << "exponent: " << exponent << std::endl;
     std::cout << "mantissa: " << mantissa << std::endl;
 
-    std::cout << "print as binary" << std::endl;
-    print_binary(exponent << 24, 8);
-    print_binary(mantissa << 9, 23);
+    std::cout << "print as binary: " << std::endl;
+    std::cout << "exponent: " << binary_string(exponent << 24, 8) << std::endl;
+    std::cout << "mantissa: " << binary_string(mantissa << 9, 23) << std::endl;
     std::cout << std::endl;
 }
 
@@ -131,8 +131,8 @@ void Float16::print() const
     std::cout << "mantissa: " << mantissa << std::endl;
 
     std::cout << "print as binary" << std::endl;
-    print_binary(uint16_t(exponent << 11), 5);
-    print_binary(uint16_t(mantissa << 6), 10);
+    std::cout << "exponent: " << binary_string(uint16_t(exponent << 11), 5) << std::endl;
+    std::cout << "mantissa: " << binary_string(uint16_t(mantissa << 6), 10) << std::endl;
     std::cout << std::endl;
 }
 

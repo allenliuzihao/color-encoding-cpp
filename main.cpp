@@ -2,8 +2,17 @@
 
 void print_binary_test()
 {
-    print_binary(0x07804000);
-    print_binary(0x7F800000);
+    auto str1 = binary_string(uint32_t(0x07804000));
+    assert(str1 == "00000111100000000100000000000000");
+
+    auto str2 = binary_string(uint32_t(0x7F800000));
+    assert(str2 == "01111111100000000000000000000000");
+
+    auto str3 = binary_string(uint16_t(0x8000));
+    assert(str3 == "1000000000000000");
+
+    auto str4 = binary_string(uint16_t(0xf010));
+    assert(str4 == "1111000000010000");
 }
 
 void test_float32_encoding()
@@ -47,5 +56,6 @@ void test_float32_encoding()
 
 int main() 
 {
+    print_binary_test();
     test_float32_encoding();
 }
