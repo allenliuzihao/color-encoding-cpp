@@ -13,6 +13,9 @@ void print_binary_test()
 
     auto str4 = binary_string(uint16_t(0xf010));
     assert(str4 == "1111000000010000");
+
+    auto str5 = binary_string(uint16_t(0xfffa));
+    assert(str5 == "1111111111111010");
 }
 
 void test_float32_encoding()
