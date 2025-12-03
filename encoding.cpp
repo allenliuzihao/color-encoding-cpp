@@ -131,8 +131,8 @@ void Float16::print() const
     std::cout << "mantissa: " << mantissa << std::endl;
 
     std::cout << "print as binary" << std::endl;
-    print_binary(exponent << 24, 8);
-    print_binary(mantissa << 9, 23);
+    print_binary(uint16_t(exponent << 11), 5);
+    print_binary(uint16_t(mantissa << 6), 10);
     std::cout << std::endl;
 }
 
