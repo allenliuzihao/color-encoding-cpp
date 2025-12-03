@@ -13,6 +13,13 @@ void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mant
     mantissa = parsed_mantissa;
 }
 
+void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
+{
+    sign = 0;
+    exponent = 0;
+    mantissa = 0;
+}
+
 float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
 {
     float signValue = sign == 1 ? -1.f : 1.f;
@@ -37,4 +44,103 @@ float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
     float frac = 1.0f + std::ldexpf(float(mantissa), -23);
     float scale = std::ldexpf(1.f, exponent - 127); // 2 ^ (exponent - 127)
     return signValue * frac * scale;
+}
+
+// convert from f16 to f32
+float compute_value(uint16_t sign, uint16_t exponent, uint16_t mantissa)
+{
+    float signValue = sign == 1 ? -1.f : 1.f;
+    if (exponent == 0x1f)
+    {
+        if (mantissa == 0)
+        {
+            return signValue * asfloat(0x7f800000);
+        }
+        else
+        {
+            return asfloat(0x7f800001);
+        }
+    }
+    else if (exponent == 0)
+    {
+        // subnormal case
+        uint32_t num_shifts = 0, curr = mantissa;
+        while ((curr & 0x200) == 0)
+        {
+            num_shifts++;
+            curr = curr << 1;
+        }
+
+        num_shifts++; // account for leading 1 bit
+        // mantissa at the correct position
+        uint32_t f32_mantissa = ((curr << 1) & 0x3ff) << 13;
+        uint32_t f32_exponent = (127 - 14 - num_shifts) & 0xff;
+        uint32_t f32 = (uint32_t(sign) << 31) | (f32_exponent << 23) | f32_mantissa;
+        return asfloat(f32);
+    }
+
+    // start with normal case
+    uint32_t f32_mantissa = uint32_t(mantissa) << 13; // put mantissa into place.
+    uint32_t f32_exponent = (int32_t(exponent - 15) + 127) & 0xff;
+    // put sign in place.
+    uint32_t f32 = (uint32_t(sign) << 31) | (f32_exponent << 23) | f32_mantissa;
+    return asfloat(f32);
+}
+
+float Float32::value() const
+{
+    return compute_value(sign, exponent, mantissa);
+}
+
+void Float32::print() const
+{
+    std::cout << "value: " << value() << std::endl;
+
+    std::cout << "print as uint" << std::endl;
+    std::cout << "sign: " << sign << std::endl;
+    std::cout << "exponent: " << exponent << std::endl;
+    std::cout << "mantissa: " << mantissa << std::endl;
+
+    std::cout << "print as binary" << std::endl;
+    print_binary(exponent << 24, 8);
+    print_binary(mantissa << 9, 23);
+    std::cout << std::endl;
+}
+
+Float32::Float32(float input)
+{
+    uint32_t local_sign = 0, local_exponent = 0, local_mantissa = 0;
+    parse_float(input, local_sign, local_exponent, local_mantissa);
+    this->sign = local_sign;
+    this->exponent = local_exponent;
+    this->mantissa = local_mantissa;
+}
+
+float Float16::value() const
+{
+    return compute_value(sign, exponent, mantissa);
+}
+
+void Float16::print() const
+{
+    std::cout << "value: " << value() << std::endl;
+
+    std::cout << "print as uint" << std::endl;
+    std::cout << "sign: " << sign << std::endl;
+    std::cout << "exponent: " << exponent << std::endl;
+    std::cout << "mantissa: " << mantissa << std::endl;
+
+    std::cout << "print as binary" << std::endl;
+    print_binary(exponent << 24, 8);
+    print_binary(mantissa << 9, 23);
+    std::cout << std::endl;
+}
+
+Float16::Float16(float input)
+{
+    uint16_t local_sign = 0, local_exponent = 0, local_mantissa = 0;
+    parse_float(input, local_sign, local_exponent, local_mantissa);
+    this->sign = local_sign;
+    this->exponent = local_exponent;
+    this->mantissa = local_mantissa;
 }
