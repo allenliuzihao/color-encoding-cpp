@@ -57,8 +57,16 @@ void test_float32_encoding()
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 130 && parsedFloat.mantissa == 4587520);
 }
 
+void test_fp16_encoding()
+{
+    auto parsedFloat = Float16(65504);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 130 && parsedFloat.mantissa == 4587520);
+}
+
 int main() 
 {
     print_binary_test();
     test_float32_encoding();
+    test_fp16_encoding();
 }

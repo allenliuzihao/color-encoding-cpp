@@ -15,9 +15,31 @@ void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mant
 
 void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
 {
-    sign = 0;
-    exponent = 0;
-    mantissa = 0;
+    uint32_t f_input = asuint(input);
+    // sign bit
+    bool isNegative = (f_input & 0x80000000) == 0x80000000;
+    uint8_t parsed_exponent = ((0x7f800000 & f_input) >> 23) & 0x000000ff;
+    uint32_t parsed_mantissa = f_input & (~0xff800000);
+
+    if (exponent == 0xff)
+    {
+        if (mantissa == 0)
+        {
+            // infinity case
+        }
+        else
+        {
+            // NaN case
+        }
+    }
+    else if (exponent == 0)
+    {
+        // subnormal case
+    }
+
+    // normal case
+    sign = isNegative ? 1 : 0;
+
 }
 
 float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
