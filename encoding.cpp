@@ -41,8 +41,10 @@ void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mant
     }
     else if (parsed_exponent == 0)
     {
-        // TODO: f32 subnormal case
-        
+        // f32 subnormal is too small to be represented in f16.
+        exponent = 0;
+        mantissa = 0;
+        return;
     }
 
     // normal case
