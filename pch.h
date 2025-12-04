@@ -4,6 +4,7 @@
 #include <iostream>
 #include <bit>
 #include <cassert>
+#include <algorithm>
 
 #include "utilities.h"
 #include "encoding.h"

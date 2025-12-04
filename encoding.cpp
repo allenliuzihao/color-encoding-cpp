@@ -22,7 +22,7 @@ void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mant
     bool isNegative = (f_input & 0x80000000) == 0x80000000;
     sign = isNegative ? 1 : 0;
 
-    if (exponent == 0xff)
+    if (parsed_exponent == 0xff)
     {
         if (mantissa == 0)
         {
@@ -39,13 +39,32 @@ void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mant
             return;
         }
     }
-    else if (exponent == 0)
+    else if (parsed_exponent == 0)
     {
-        // subnormal case
+        // TODO: f32 subnormal case
+        
     }
 
     // normal case
-    
+    int32_t real_exponent = int32_t(parsed_exponent) - 127;
+    int32_t f16_exponent = real_exponent + 15;
+    if (f16_exponent >= 31)
+    {
+        // overflow to infinity
+        exponent = 0x1f;
+        mantissa = 0;
+        return;
+    } 
+    else if (f16_exponent <= 0)
+    {
+        uint32_t shifts = std::abs(real_exponent) - 14;
+        exponent = 0;
+        mantissa = ((parsed_mantissa >> 13) & 0x3ff) >> shifts;
+        return;
+    }
+
+    exponent = f16_exponent & 0x1f; // the maximum is 31 and minimum is 0
+    mantissa = (parsed_mantissa >> 13) & 0x3ff; // take the top 10 bits
 }
 
 float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
