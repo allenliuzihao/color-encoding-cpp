@@ -13,6 +13,7 @@ void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mant
     mantissa = parsed_mantissa;
 }
 
+// computes f32tof16
 void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
 {
     uint32_t f_input = asuint(input);
@@ -22,18 +23,18 @@ void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mant
     bool isNegative = (f_input & 0x80000000) == 0x80000000;
     sign = isNegative ? 1 : 0;
 
+    // infinity and NaN case
     if (parsed_exponent == 0xff)
     {
+        // infinity case
         if (mantissa == 0)
         {
-            // infinity case
             exponent = 0x1f;
             mantissa = 0;
             return;
         }
-        else
+        else // NaN case
         {
-            // NaN case
             exponent = 0x1f;
             mantissa = 1; // set to some non-zero value
             return;
@@ -47,7 +48,7 @@ void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mant
         return;
     }
 
-    // normal case
+    // f32 normal case
     int32_t real_exponent = int32_t(parsed_exponent) - 127;
     int32_t f16_exponent = real_exponent + 15;
     if (f16_exponent >= 31)
@@ -56,12 +57,12 @@ void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mant
         exponent = 0x1f;
         mantissa = 0;
         return;
-    } 
+    }
     else if (f16_exponent <= 0)
     {
         uint32_t shifts = std::abs(real_exponent) - 14;
         exponent = 0;
-        mantissa = ((parsed_mantissa >> 13) & 0x3ff) >> shifts;
+        mantissa = (((parsed_mantissa >> 13) & 0x3ff) | 0x400) >> shifts;
         return;
     }
 
@@ -95,7 +96,7 @@ float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
     return signValue * frac * scale;
 }
 
-// convert from f16 to f32
+// computes f16tof32
 float compute_value(uint16_t sign, uint16_t exponent, uint16_t mantissa)
 {
     float signValue = sign == 1 ? -1.f : 1.f;
@@ -112,7 +113,7 @@ float compute_value(uint16_t sign, uint16_t exponent, uint16_t mantissa)
     }
     else if (exponent == 0)
     {
-        // subnormal case
+        // f16 subnormal case
         uint32_t num_shifts = 0, curr = mantissa;
         while ((curr & 0x200) == 0)
         {
