@@ -63,7 +63,7 @@ void test_fp16_encoding()
     auto parsedFloat = Float16(float(65504));
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
-    
+
     // test minimum positive normal float16 value
     float minNormalF16 = std::ldexpf(1.f, -14); // 2^-14
     parsedFloat = Float16(minNormalF16);
@@ -75,6 +75,13 @@ void test_fp16_encoding()
     parsedFloat = Float16(minSubnormalF16);
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1);
+
+    // test largest subnormal float16 value
+    float maxSubnormalF16 = std::ldexpf(1023.f, -24); // (2^10 - 1) * 2^-24
+    parsedFloat = Float16(maxSubnormalF16);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1023);
+
 }
 
 int main() 
