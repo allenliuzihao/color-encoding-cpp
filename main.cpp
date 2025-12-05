@@ -59,9 +59,16 @@ void test_float32_encoding()
 
 void test_fp16_encoding()
 {
-    auto parsedFloat = Float16(65504);
+    // test maximum float16 value
+    auto parsedFloat = Float16(float(65504));
     parsedFloat.print();
-    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 130 && parsedFloat.mantissa == 4587520);
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
+    
+    // test minimum positive normal float16 value
+    float minNormalF16 = std::ldexpf(1.f, -14); // 2^-14
+    parsedFloat = Float16(minNormalF16);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 1 && parsedFloat.mantissa == 0);
 }
 
 int main() 

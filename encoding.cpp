@@ -14,7 +14,7 @@ void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mant
 }
 
 // computes f32tof16
-void parse_float(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
+void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
 {
     uint32_t f_input = asuint(input);
     uint8_t parsed_exponent = ((0x7f800000 & f_input) >> 23) & 0x000000ff;
@@ -97,7 +97,7 @@ float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
 }
 
 // computes f16tof32
-float compute_value(uint16_t sign, uint16_t exponent, uint16_t mantissa)
+float f16tof32(uint16_t sign, uint16_t exponent, uint16_t mantissa)
 {
     float signValue = sign == 1 ? -1.f : 1.f;
     if (exponent == 0x1f)
@@ -168,7 +168,7 @@ Float32::Float32(float input)
 
 float Float16::value() const
 {
-    return compute_value(sign, exponent, mantissa);
+    return f16tof32(sign, exponent, mantissa);
 }
 
 void Float16::print() const
@@ -189,8 +189,15 @@ void Float16::print() const
 Float16::Float16(float input)
 {
     uint16_t local_sign = 0, local_exponent = 0, local_mantissa = 0;
-    parse_float(input, local_sign, local_exponent, local_mantissa);
+    f32tof16(input, local_sign, local_exponent, local_mantissa);
     this->sign = local_sign;
     this->exponent = local_exponent;
     this->mantissa = local_mantissa;
+}
+
+Float16::Float16(uint16_t raw)
+{
+    this->sign = (raw & 0x8000) >> 15;
+    this->exponent = (raw & 0x7c00) >> 10;
+    this->mantissa = raw & 0x03ff;
 }
