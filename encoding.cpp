@@ -51,7 +51,7 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
     // f32 normal case
     int32_t real_exponent = int32_t(parsed_exponent) - 127;
     int32_t f16_exponent = real_exponent + 15;
-    if (f16_exponent >= 31)
+    if (f16_exponent >= 31 || (f16_exponent == 30 && ((parsed_mantissa & 0x1fff) != 0)))
     {
         // overflow to infinity
         exponent = 0x1f;
