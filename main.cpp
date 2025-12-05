@@ -69,6 +69,12 @@ void test_fp16_encoding()
     parsedFloat = Float16(minNormalF16);
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 1 && parsedFloat.mantissa == 0);
+
+    // test minimum positive subnormal float16 value
+    float minSubnormalF16 = std::ldexpf(1.f, -24); // 2^-24
+    parsedFloat = Float16(minSubnormalF16);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1);
 }
 
 int main() 
