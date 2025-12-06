@@ -59,10 +59,16 @@ void test_float32_encoding()
 
 void test_fp16_special_numbers()
 {
+    std::cout << "test fp16 special numbers\n";
+
     /* testing special numbers */
     auto parsedFloat = Float16(float(65505));
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
+
+    parsedFloat = Float16(float(-65505));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 1 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
 
     parsedFloat = Float16(float(65520));
     parsedFloat.print();
@@ -71,10 +77,16 @@ void test_fp16_special_numbers()
     parsedFloat = Float16(float(65521));
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0);
+
+    parsedFloat = Float16(float(-65521));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 1 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0);
 }
 
 void test_fp16_normal_numbers()
 {
+    std::cout << "test fp16 normal numbers\n";
+
     /* testing normal numbers */
     // test maximum float16 value
     auto parsedFloat = Float16(float(65504));
@@ -104,6 +116,8 @@ void test_fp16_normal_numbers()
 
 void test_fp16_subnormals()
 {
+    std::cout << "test fp16 subnormal numbers\n";
+
     /* testing subnormals */
     // test minimum positive subnormal float16 value
     float minSubnormalF16 = std::ldexpf(1.f, -24); // 2^-24
