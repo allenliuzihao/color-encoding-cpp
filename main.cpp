@@ -85,6 +85,11 @@ void test_fp16_encoding()
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 16 && parsedFloat.mantissa == 0b1001001000);
 
+    // value closest to pi
+    parsedFloat = Float16(1.f);
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 15 && parsedFloat.mantissa == 0);
+
     /* testing subnormals */
     // test minimum positive subnormal float16 value
     float minSubnormalF16 = std::ldexpf(1.f, -24); // 2^-24
