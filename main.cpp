@@ -136,6 +136,15 @@ void test_fp16_subnormals()
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 515);
 
+    // test subnormal float16 value
+    for (int i = 0; i < 1024; ++i) 
+    {
+        subnormal = std::ldexpf(i, -24);
+        parsedFloat = Float16(subnormal);
+        //parsedFloat.print();
+        assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == i);
+    }
+
     // test largest subnormal float16 value
     float maxSubnormalF16 = std::ldexpf(1023.f, -24); // (2^10 - 1) * 2^-24
     parsedFloat = Float16(maxSubnormalF16);
