@@ -62,7 +62,7 @@ void test_fp16_encoding()
     /* testing special numbers */
     auto parsedFloat = Float16(float(65505));
     parsedFloat.print();
-    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0);
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
 
     /* testing normal numbers */
     // test maximum float16 value

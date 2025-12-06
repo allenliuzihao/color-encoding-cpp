@@ -16,6 +16,8 @@ void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mant
 // computes f32tof16
 void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
 {
+    input += asfloat(0x00001000); // add rounding bias
+
     uint32_t f_input = asuint(input);
     uint8_t parsed_exponent = ((0x7f800000 & f_input) >> 23) & 0x000000ff;
     uint32_t parsed_mantissa = f_input & (~0xff800000);
@@ -51,9 +53,9 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
     // f32 normal case
     int32_t real_exponent = int32_t(parsed_exponent) - 127;
     int32_t f16_exponent = real_exponent + 15;
-    bool overflowMantissa = (parsed_mantissa & 0x1fff) != 0; // check if any of the lower 13 bits are set
+    uint16_t shifted_mantissa = (parsed_mantissa >> 13) & 0x3ff;
 
-    if (f16_exponent >= 31 || (f16_exponent == 30 && overflowMantissa))
+    if (f16_exponent >= 31)
     {
         // overflow to infinity
         exponent = 0x1f;
@@ -64,12 +66,12 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
     {
         uint32_t shifts = std::abs(real_exponent) - 14;
         exponent = 0;
-        mantissa = (((parsed_mantissa >> 13) & 0x3ff) | 0x400) >> shifts;
+        mantissa = (shifted_mantissa | 0x400) >> shifts;
         return;
     }
 
     exponent = f16_exponent & 0x1f; // the maximum is 31 and minimum is 0
-    mantissa = (parsed_mantissa >> 13) & 0x3ff; // take the top 10 bits
+    mantissa = shifted_mantissa; // take the top 10 bits
 }
 
 float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
