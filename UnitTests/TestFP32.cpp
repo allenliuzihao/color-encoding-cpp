@@ -51,6 +51,7 @@ namespace UnitTests
 
         TEST_METHOD(FP32Subnormals)
         {
+            // smallest subnormal
             float expectedVal = powf(2.0f, -149);
             auto parsedFloat = Float32(expectedVal);
             auto val = parsedFloat.value();
@@ -61,6 +62,12 @@ namespace UnitTests
             parsedFloat = Float32(expectedVal);
             val = parsedFloat.value();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0x007fffff && val == expectedVal);
+
+            // signed largest subnormal
+            expectedVal = asfloat(0x807fffff);
+            parsedFloat = Float32(expectedVal);
+            val = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 1 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0x007fffff && val == expectedVal);
         }
 	};
 }
