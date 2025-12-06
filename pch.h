@@ -8,4 +8,4 @@
 #include <cmath>
 
 #include "utilities.h"
-#include "encoding.h"
+#include "fp_encoding.h"
