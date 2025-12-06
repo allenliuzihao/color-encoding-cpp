@@ -9,3 +9,4 @@
 
 #include "utilities.h"
 #include "fp_encoding.h"
+#include "color_encoding.h"
