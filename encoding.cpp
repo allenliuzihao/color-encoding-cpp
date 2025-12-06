@@ -16,11 +16,10 @@ void parse_float(float input, uint32_t& sign, uint32_t& exponent, uint32_t& mant
 // computes f32tof16
 void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantissa)
 {
-    input += asfloat(0x00001000); // add rounding bias
-
-    uint32_t f_input = asuint(input);
+    uint32_t f_input = asuint(input) + 0x00001000;
     uint8_t parsed_exponent = ((0x7f800000 & f_input) >> 23) & 0x000000ff;
     uint32_t parsed_mantissa = f_input & (~0xff800000);
+
     // sign bit
     bool isNegative = (f_input & 0x80000000) > 0;
     sign = isNegative ? 1 : 0;
