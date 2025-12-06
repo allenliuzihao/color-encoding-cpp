@@ -28,7 +28,7 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
     if (parsed_exponent == 0xff)
     {
         // infinity case
-        if (mantissa == 0)
+        if (parsed_mantissa == 0)
         {
             exponent = 0x1f;
             mantissa = 0;

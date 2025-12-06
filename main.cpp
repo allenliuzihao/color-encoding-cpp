@@ -86,6 +86,10 @@ void test_fp16_special_numbers()
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0);
 
+    parsedFloat = Float16(asfloat(0x7f800001));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 1);
+
 }
 
 void test_fp16_normal_numbers()
