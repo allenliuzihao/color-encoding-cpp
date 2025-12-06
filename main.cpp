@@ -78,6 +78,10 @@ void test_fp16_encoding()
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
 
+    parsedFloat = Float16(float(-65504));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 1 && parsedFloat.exponent == 30 && parsedFloat.mantissa == 1023);
+
     // test minimum positive normal float16 value
     float minNormalF16 = std::ldexpf(1.f, -14); // 2^-14
     parsedFloat = Float16(minNormalF16);
@@ -89,7 +93,7 @@ void test_fp16_encoding()
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 16 && parsedFloat.mantissa == 0b1001001000);
 
-    // value closest to pi
+    // value 1
     parsedFloat = Float16(1.f);
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 15 && parsedFloat.mantissa == 0);
