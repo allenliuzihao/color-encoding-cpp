@@ -64,6 +64,11 @@ namespace UnitTests
             val = parsedFloat.value();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 16 && parsedFloat.mantissa == 0b1001001000 && val == 3.140625f);
 
+            // check rounding
+            parsedFloat = Float16(3.1445224f);
+            uint16_t rawVal = parsedFloat.raw();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 16 && parsedFloat.mantissa == 0b1001001010 && rawVal == 0x424A);
+
             // value 1
             parsedFloat = Float16(1.f);
             val = parsedFloat.value();

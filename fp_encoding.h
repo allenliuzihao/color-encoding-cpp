@@ -8,9 +8,21 @@ float f16tof32(uint16_t sign, uint16_t exponent, uint16_t mantissa);
 
 struct Float32
 {
-    uint32_t sign : 1;
-    uint32_t exponent : 8;
-    uint32_t mantissa : 23;
+    union
+    {
+        uint32_t u;       // interpret as raw 32-bit integer
+        struct
+        {
+            uint32_t mantissa : 23;
+            uint32_t exponent : 8;
+            uint32_t sign : 1;
+        };           // interpret as IEEE-754 fields
+    };
+
+    inline uint32_t raw() const
+    {
+        return u;
+    }
 
     float value() const;
     void print() const;
@@ -19,11 +31,23 @@ struct Float32
 
 struct Float16
 {
-    uint16_t sign : 1;
-    uint16_t exponent : 5;
-    uint16_t mantissa : 10;
+    union
+    {
+        uint16_t u;       // interpret as raw 32-bit integer
+        struct
+        {
+            uint16_t mantissa : 10;
+            uint16_t exponent : 5;
+            uint16_t sign : 1;
+        };           // interpret as IEEE-754 fields
+    };
 
     float value() const;
+    
+    inline uint16_t raw() const
+    {
+        return u;
+    }
     void print() const;
     Float16(float input);
     Float16(uint16_t raw);
