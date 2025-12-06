@@ -127,11 +127,9 @@ void test_fp16_subnormals()
     // test subnormal float16 value
     for (int i = 0; i < 1024; ++i) 
     {
-        //std::cout << "i: " << i << "\n";
         float subnormal = std::ldexpf(float(i), -24);
         auto parsedFloat = Float16(subnormal);
         auto val = parsedFloat.value();
-        //parsedFloat.print();
         assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == i && val == subnormal);
     }
 }
