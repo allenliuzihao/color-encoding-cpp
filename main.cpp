@@ -68,6 +68,10 @@ void test_fp16_encoding()
     parsedFloat.print();
     assert(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0);
 
+    parsedFloat = Float16(float(65521));
+    parsedFloat.print();
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0);
+
     /* testing normal numbers */
     // test maximum float16 value
     parsedFloat = Float16(float(65504));
