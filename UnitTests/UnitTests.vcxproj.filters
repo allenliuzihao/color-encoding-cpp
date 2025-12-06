@@ -24,6 +24,9 @@
     <ClCompile Include="TestBinary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestFP16cpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h">
