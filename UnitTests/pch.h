@@ -13,6 +13,7 @@
 #include <bit>
 #include <cassert>
 #include <algorithm>
+#include <cmath>
 
 #include "utilities.h"
 #include "encoding.h"

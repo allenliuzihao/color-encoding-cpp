@@ -14,14 +14,20 @@ namespace UnitTests
             auto val = parsedFloat.value();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0 && val == 0.0f);
 
-            parsedFloat = Float32(asfloat(0x7f800000));
-            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 0);
+            auto expectedFloat = asfloat(0x7f800000);
+            parsedFloat = Float32(expectedFloat);
+            val = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 0 && expectedFloat == val);
 
-            parsedFloat = Float32(asfloat(0xff800000));
-            Assert::IsTrue(parsedFloat.sign == 1 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 0);
+            expectedFloat = asfloat(0xff800000);
+            parsedFloat = Float32(expectedFloat);
+            val = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 1 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 0 && expectedFloat == val);
 
-            parsedFloat = Float32(asfloat(0x7f800001));
-            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 1);
+            expectedFloat = asfloat(0x7f800001);
+            parsedFloat = Float32(expectedFloat);
+            val = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0xff && parsedFloat.mantissa == 1 && std::isnan(val));
         }
 
 		TEST_METHOD(FP32Normals)
