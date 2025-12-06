@@ -1,7 +1,7 @@
 <Solution>
   <Configurations>
     <Platform Name="x64" />
-    <Platform Name="x86" />
   </Configurations>
+  <Project Path="../UnitTests/UnitTests.vcxproj" />
   <Project Path="color-encoding.vcxproj" Id="eb832fff-839a-40b0-a96b-4da48d4129bf" />
 </Solution>
