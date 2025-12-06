@@ -55,6 +55,12 @@ namespace UnitTests
             auto parsedFloat = Float32(expectedVal);
             auto val = parsedFloat.value();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1 && val == expectedVal);
+
+            // largest subnormal
+            expectedVal = asfloat(0x007fffff);
+            parsedFloat = Float32(expectedVal);
+            val = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0x007fffff && val == expectedVal);
         }
 	};
 }
