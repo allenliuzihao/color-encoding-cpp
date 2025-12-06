@@ -20,7 +20,7 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
     uint8_t parsed_exponent = ((0x7f800000 & f_input) >> 23) & 0x000000ff;
     uint32_t parsed_mantissa = f_input & (~0xff800000);
     // sign bit
-    bool isNegative = (f_input & 0x80000000) == 0x80000000;
+    bool isNegative = (f_input & 0x80000000) > 0;
     sign = isNegative ? 1 : 0;
 
     // infinity and NaN case
@@ -51,7 +51,9 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
     // f32 normal case
     int32_t real_exponent = int32_t(parsed_exponent) - 127;
     int32_t f16_exponent = real_exponent + 15;
-    if (f16_exponent >= 31 || (f16_exponent == 30 && ((parsed_mantissa & 0x1fff) != 0)))
+    bool overflowMantissa = (parsed_mantissa & 0x1fff) != 0; // check if any of the lower 13 bits are set
+
+    if (f16_exponent >= 31 || (f16_exponent == 30 && overflowMantissa))
     {
         // overflow to infinity
         exponent = 0x1f;
