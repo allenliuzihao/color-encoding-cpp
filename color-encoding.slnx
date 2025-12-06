@@ -2,6 +2,6 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="../UnitTests/UnitTests.vcxproj" />
   <Project Path="color-encoding.vcxproj" Id="eb832fff-839a-40b0-a96b-4da48d4129bf" />
+  <Project Path="UnitTests/UnitTests.vcxproj" Id="df46015a-867e-d5b8-d2e9-8cebadf84ad3" />
 </Solution>
