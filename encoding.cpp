@@ -116,6 +116,11 @@ float f16tof32(uint16_t sign, uint16_t exponent, uint16_t mantissa)
     }
     else if (exponent == 0)
     {
+        if (mantissa == 0)
+        {
+            return signValue * 0.f;
+        }
+
         // f16 subnormal case
         uint32_t num_shifts = 0, curr = mantissa;
         while ((curr & 0x200) == 0)

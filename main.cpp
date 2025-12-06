@@ -128,28 +128,30 @@ void test_fp16_subnormals()
     float minSubnormalF16 = std::ldexpf(1.f, -24); // 2^-24
     auto parsedFloat = Float16(minSubnormalF16);
     parsedFloat.print();
-    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1);
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1 && parsedFloat.value() == minSubnormalF16);
 
     // test subnormal float16 value
     float subnormal = std::ldexpf(515.f, -24); 
     parsedFloat = Float16(subnormal);
     parsedFloat.print();
-    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 515);
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 515 && parsedFloat.value() == subnormal);
 
     // test subnormal float16 value
     for (int i = 0; i < 1024; ++i) 
     {
+        //std::cout << "i: " << i << "\n";
         subnormal = std::ldexpf(i, -24);
         parsedFloat = Float16(subnormal);
+        auto val = parsedFloat.value();
         //parsedFloat.print();
-        assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == i);
+        assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == i && val == subnormal);
     }
 
     // test largest subnormal float16 value
     float maxSubnormalF16 = std::ldexpf(1023.f, -24); // (2^10 - 1) * 2^-24
     parsedFloat = Float16(maxSubnormalF16);
     parsedFloat.print();
-    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1023);
+    assert(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1023 && parsedFloat.value() == maxSubnormalF16);
 }
 
 void test_fp16_encoding()
