@@ -38,6 +38,10 @@ namespace UnitTests
             parsedFloat = Float16(asfloat(0x7f800001));
             value = parsedFloat.value();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 1 && std::isnan(value));
+        
+            parsedFloat = Float16(asfloat(0x477FF000));
+            value = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0 && std::isinf(value) && value > 0);
         }
 
         TEST_METHOD(FP16Normals)
@@ -69,6 +73,11 @@ namespace UnitTests
             parsedFloat = Float16(expectedFloat);
             uint16_t rawVal = parsedFloat.raw();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 16 && parsedFloat.mantissa == 0b1001001010 && rawVal == 0x424A);
+
+            expectedFloat = asfloat(0x407FF000);
+            parsedFloat = Float16(expectedFloat);
+            rawVal = parsedFloat.raw();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 17 && parsedFloat.mantissa == 0 && rawVal == 0x4400);
 
             // value 1
             parsedFloat = Float16(1.f);
