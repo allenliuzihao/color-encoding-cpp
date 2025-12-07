@@ -38,7 +38,7 @@
     <ClCompile Include="utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="color_encodingcpp.cpp">
+    <ClCompile Include="color_encoding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

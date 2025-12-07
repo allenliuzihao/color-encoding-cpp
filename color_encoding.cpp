@@ -29,7 +29,18 @@ float4<Float32> decode_rgb10a2_unorm(uint32_t encoded)
 
 uint32_t encode_r11g11b10(float3<Float32> rgb)
 {
-    return 0;
+    uint16_t r16 = Float16((float)rgb.x).raw() + 0x0008;
+    uint16_t g16 = Float16((float)rgb.y).raw() + 0x0008;
+    uint16_t b16 = Float16((float)rgb.z).raw() + 0x0010;
+
+    uint32_t result = 0;
+    // r: 5 bits exponent, 6 bits mantissa
+    uint32_t r = uint32_t(r16 & 0x7ff0) >> 4;
+    // g: 5 bits exponent, 6 bits mantissa
+    uint32_t g = uint32_t(g16 & 0x7ff0) << 7;
+    // b: 5 bits exponent, 5 bits mantissa
+    uint32_t b = uint32_t(b16 & 0x7fe0) << 17;
+    return r | g | b;
 }
 
 float3<Float32> decode_r11g11b10(uint32_t encoded)
