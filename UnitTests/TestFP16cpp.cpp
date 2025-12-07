@@ -37,7 +37,7 @@ namespace UnitTests
 
             parsedFloat = Float16(asfloat(0x7f800001));
             value = parsedFloat.value();
-            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 1 && std::isnan(value));
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0x3ff && std::isnan(value));
         
             parsedFloat = Float16(asfloat(0x477FF000));
             value = parsedFloat.value();

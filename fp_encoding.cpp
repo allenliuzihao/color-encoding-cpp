@@ -37,7 +37,7 @@ void f32tof16(float input, uint16_t& sign, uint16_t& exponent, uint16_t& mantiss
         else // NaN case
         {
             exponent = 0x1f;
-            mantissa = 1; // set to some non-zero value
+            mantissa = 0x3ff; // set to some non-zero value
             return;
         }
     }
@@ -84,7 +84,7 @@ float compute_value(uint32_t sign, uint32_t exponent, uint32_t mantissa)
         }
         else
         {
-            return asfloat(0x7f800001);
+            return asfloat(0x7fffffff);
         }
     }
     else if (exponent == 0)
@@ -111,7 +111,7 @@ float f16tof32(uint16_t sign, uint16_t exponent, uint16_t mantissa)
         }
         else
         {
-            return asfloat(0x7f800001);
+            return asfloat(0x7fffffff);
         }
     }
     else if (exponent == 0)
