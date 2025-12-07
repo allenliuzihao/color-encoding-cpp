@@ -9,6 +9,16 @@ struct float3
     float3(float x, float y, float z) : x(x), y(y), z(z) {}
 };
 
+struct float4
+{
+    float x;
+    float y;
+    float z;
+    float w;
+
+    float4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+};
+
 uint32_t asuint(float x);
 float asfloat(uint32_t x);
 

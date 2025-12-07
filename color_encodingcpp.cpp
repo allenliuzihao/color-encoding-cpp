@@ -19,3 +19,13 @@ float3 decode_r9g9b9e5(uint32_t encoded)
 {
     return float3(0, 0, 0);
 }
+
+uint32_t encode_rgb10a2(float4 rgba)
+{
+    return 0;
+}
+
+float4 decode_rgb10a2(uint32_t encoded)
+{
+    return float4(0, 0, 0, 0);
+}
