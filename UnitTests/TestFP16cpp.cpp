@@ -42,6 +42,22 @@ namespace UnitTests
             parsedFloat = Float16(asfloat(0x477FF000));
             value = parsedFloat.value();
             Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 31 && parsedFloat.mantissa == 0 && std::isinf(value) && value > 0);
+            
+            // minimum positive subnormal float32 value
+            parsedFloat = Float16(asfloat(0x00000001));
+            value = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0 && value == 0.0f);
+
+            // float32 normal that should be rounded to zero in float16
+            parsedFloat = Float16(asfloat(0x33000000));
+            value = parsedFloat.value();
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 0 && value == 0.0f);
+
+            // float32 normal that should be rounded to the smallest subnormal in float16
+            parsedFloat = Float16(asfloat(0x337ff000));
+            value = parsedFloat.value();
+            float expected = std::ldexpf(1.f, -24); // 2^-24
+            Assert::IsTrue(parsedFloat.sign == 0 && parsedFloat.exponent == 0 && parsedFloat.mantissa == 1 && value == expected);
         }
 
         TEST_METHOD(FP16Normals)
