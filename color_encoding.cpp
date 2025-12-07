@@ -45,7 +45,19 @@ uint32_t encode_r11g11b10(float3<Float32> rgb)
 
 float3<Float32> decode_r11g11b10(uint32_t encoded)
 {
-    return float3<Float32>{};
+    uint16_t r16 = uint16_t((encoded & 0x000007ff) << 4);
+    uint16_t g16 = uint16_t((encoded & 0x003ff800) >> 7);
+    uint16_t b16 = uint16_t((encoded & 0xffc00000) >> 17);
+
+    Float16 r_f16 = Float16(r16);
+    Float16 g_f16 = Float16(g16);
+    Float16 b_f16 = Float16(b16);
+
+    return float3<Float32>{
+        r_f16.value(),
+        g_f16.value(),
+        b_f16.value()
+    };
 }
 
 uint32_t encode_r9g9b9e5(float3<Float32> rgb)
