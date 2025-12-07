@@ -1,5 +1,8 @@
 #pragma once
 
+float4<Float16> encode_r16g16b16a16(float4<Float32> rgb);
+float4<Float32> decode_r16g16b16a16(float4<Float16>);
+
 uint32_t encode_r11g11b10(float3<Float32> rgb);
 float3<Float32> decode_r11g11b10(uint32_t encoded);
 

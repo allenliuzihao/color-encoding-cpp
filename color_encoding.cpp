@@ -69,3 +69,25 @@ float3<Float32> decode_r9g9b9e5(uint32_t encoded)
 {
     return float3<Float32>{};
 }
+
+float4<Float16> encode_r16g16b16a16(float4<Float32> rgb)
+{
+    float4<Float16> result = {
+        Float16((float)rgb.x),
+        Float16((float)rgb.y),
+        Float16((float)rgb.z),
+        Float16((float)rgb.w)
+    };
+    return result;
+}
+
+float4<Float32> decode_r16g16b16a16(float4<Float16> rgb)
+{
+    float4 <Float32> result = {
+        Float32((float)rgb.x),
+        Float32((float)rgb.y),
+        Float32((float)rgb.z),
+        Float32((float)rgb.w)
+    };
+    return result;
+}
