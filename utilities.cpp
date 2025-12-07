@@ -37,22 +37,3 @@ std::string binary_string(uint32_t input, uint32_t num_bits)
     }
     return result;
 }
-
-float3 saturate(float3 input)
-{
-    float3 result = {};
-    result.x = std::clamp(input.x, 0.f, 1.f);
-    result.y = std::clamp(input.y, 0.f, 1.f);
-    result.z = std::clamp(input.z, 0.f, 1.f);
-    return result;
-}
-
-float4 saturate(float4 input)
-{
-    float4 result = {};
-    result.x = std::clamp(input.x, 0.f, 1.f);
-    result.y = std::clamp(input.y, 0.f, 1.f);
-    result.z = std::clamp(input.z, 0.f, 1.f);
-    result.w = std::clamp(input.z, 0.f, 1.f);
-    return result;
-}

@@ -26,7 +26,14 @@ struct Float32
 
     float value() const;
     void print() const;
+
+    Float32() : u(0) {}
     Float32(float input);
+
+    inline operator float()
+    {
+         return value();
+    }
 };
 
 struct Float16
@@ -48,7 +55,15 @@ struct Float16
     {
         return u;
     }
+
+    inline operator float()
+    {
+        return value();
+    }
+
     void print() const;
+
+    Float16() : u(0) {}
     Float16(float input);
     Float16(uint16_t raw);
 };
