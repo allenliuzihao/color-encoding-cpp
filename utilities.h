@@ -44,6 +44,48 @@ float4<T> saturate(float4<T> v)
     return result;
 }
 
+template<typename T>
+float3<T> min(float3<T> v, float minValue)
+{
+    float3<T> result = {};
+    result.x = std::min((float)v.x, minValue);
+    result.y = std::min((float)v.y, minValue);
+    result.z = std::min((float)v.z, minValue);
+    return result;
+}
+
+template<typename T>
+float4<T> min(float4<T> v, float minValue)
+{
+    float4<T> result = {};
+    result.x = std::min((float)v.x, minValue);
+    result.y = std::min((float)v.y, minValue);
+    result.z = std::min((float)v.z, minValue);
+    result.w = std::min((float)v.w, minValue);
+    return result;
+}
+
+template<typename T>
+float3<T> max(float3<T> v, float maxValue)
+{
+    float3<T> result = {};
+    result.x = std::max((float)v.x, maxValue);
+    result.y = std::max((float)v.y, maxValue);
+    result.z = std::max((float)v.z, maxValue);
+    return result;
+}
+
+template<typename T>
+float4<T> max(float4<T> v, float maxValue)
+{
+    float4<T> result = {};
+    result.x = std::max((float)v.x, maxValue);
+    result.y = std::max((float)v.y, maxValue);
+    result.z = std::max((float)v.z, maxValue);
+    result.w = std::max((float)v.w, maxValue);
+    return result;
+}
+
 uint32_t asuint(float x);
 float asfloat(uint32_t x);
 
