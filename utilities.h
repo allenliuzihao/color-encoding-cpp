@@ -3,7 +3,8 @@
 template <typename T, size_t N>
 struct vector
 {
-    T data[N];
+    T data[N]{}; // Fix C26495: always initialize member variable
+
     vector() : data{} {}
 
     // Copy constructor
@@ -25,7 +26,7 @@ struct vector
     }
 
     // initialize from initializer list
-    vector(std::initializer_list<T> init)
+    vector(std::initializer_list<T> init) 
     {
         size_t i = 0;
         for (auto it = init.begin(); it != init.end() && i < N; ++it, ++i)
@@ -40,7 +41,7 @@ struct vector
         sizeof...(Args) == N &&
         !std::is_same_v<vector, std::decay_t<Args>>...
         >>
-    vector(Args&&... args)
+    vector(Args&&... args) 
     {
         static_assert(sizeof...(Args) == N, "vector requires N arguments");
         T arr[N] = { static_cast<T>(args)... };
