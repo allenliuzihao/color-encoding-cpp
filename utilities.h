@@ -39,12 +39,12 @@ struct vector
     template<typename... Args, 
         typename = std::enable_if_t<
         sizeof...(Args) == N &&
-        !std::is_same_v<vector, std::decay_t<Args>>...
+        std::is_same_v<T, std::decay_t<Args>>...
         >>
     vector(Args&&... args) 
     {
         static_assert(sizeof...(Args) == N, "vector requires N arguments");
-        T arr[N] = { static_cast<T>(args)... };
+        T arr[N] = { args... };
         for (size_t i = 0; i < N; ++i)
         {
             data[i] = arr[i];
