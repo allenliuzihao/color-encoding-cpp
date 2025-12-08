@@ -29,6 +29,16 @@ namespace UnitTests
             Assert::AreEqual(1.0f, vec3.x().value());
             Assert::AreEqual(-0.5f, vec3.y().value());
             Assert::AreEqual(3.0f, vec3.z().value());
+
+            float3<Float16> vec4 = vec3;
+            Assert::AreEqual(1.0f, vec4.x().value());
+            Assert::AreEqual(-0.5f, vec4.y().value());
+            Assert::AreEqual(3.0f, vec4.z().value());
+
+            float3<Float16> vec5 = std::move(vec3);
+            Assert::AreEqual(1.0f, vec5.x().value());
+            Assert::AreEqual(-0.5f, vec5.y().value());
+            Assert::AreEqual(3.0f, vec5.z().value());
         }
 
         TEST_METHOD(TestFloat4)
