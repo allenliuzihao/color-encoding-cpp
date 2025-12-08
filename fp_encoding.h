@@ -30,7 +30,7 @@ struct Float32
     Float32() : u(0) {}
     Float32(float input);
 
-    inline operator float()
+    inline operator float() const
     {
          return value();
     }

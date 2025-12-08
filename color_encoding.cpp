@@ -64,12 +64,29 @@ float3<Float32> decode_r11g11b10(uint32_t encoded)
 
 uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 {
+    float minValue = Float16(uint16_t(0x0001)).value();
+    float maxValue = Float16(uint16_t(0x7bfc)).value();
+
+    rgb = modify(rgb, [&](Float32& output, const Float32 &input) {
+        if (input > 0)
+        {
+            output = std::clamp((float)input, minValue, maxValue);
+        }
+    });
+
+    // find maximum channel
+    Float32 maxChannel = maximum(rgb);
+    // convert exponent from fp32 to fp9e5
+    int32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15;
+
+    // exponents for each channel
+    int32_t redShift = maxChannel.exponent - rgb.x().exponent;
+    int32_t greenShift = maxChannel.exponent - rgb.y().exponent;
+    int32_t blueShift = maxChannel.exponent - rgb.z().exponent;
+
+
+
     uint32_t result = 0;
-    uint16_t maxValue = 0x7bfc;
-    rgb = clamp(rgb, 0.0f, Float16(maxValue));
-
-
-
     return result;
 }
 

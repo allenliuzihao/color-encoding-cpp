@@ -180,12 +180,45 @@ vector<T, N> max(vector<T, N> v, float maxValue)
 }
 
 template<typename T, size_t N>
+T maximum(vector<T, N> v)
+{
+    T result = v[0];
+    for (int i = 1; i < N; ++i)
+    {
+        result = std::max((float) result, (float)v[i]);
+    }
+    return result;
+}
+
+template<typename T, size_t N>
+T minimum(vector<T, N> v)
+{
+    T result = v[0];
+    for (int i = 1; i < N; ++i)
+    {
+        result = std::min((float) result, (float)v[i]);
+    }
+    return result;
+}
+
+template<typename T, size_t N>
 vector<T, N> ldexp(vector<T, N> v, int exp)
 {
     vector<T, N> result = {};
     for (size_t i = 0; i < N; ++i)
     {
         result[i] = std::ldexpf((float)v[i], exp);
+    }
+    return result;
+}
+
+template<typename T, size_t N, typename Func>
+vector<T, N> modify(vector<T, N> v, Func func)
+{
+    vector<T, N> result = {};
+    for (size_t i = 0; i < N; ++i)
+    {
+        func(result[i], v[i]);
     }
     return result;
 }
