@@ -70,8 +70,18 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 
 float3<Float32> decode_r9g9b9e5(uint32_t encoded)
 {
-    return float3<Float32>{
+    uint32_t r = (encoded & 0x000001ff);
+    uint32_t g = (encoded & 0x0003fe00) >> 9;
+    uint32_t b = (encoded & 0x07fc0000) >> 18;
+    uint32_t e = (encoded & 0xf8000000) >> 27;
+
+    int32_t real_exponent = int32_t(e) - 15;
+    float3<Float32> rgb_f32 = {
+        Float32(static_cast<float>(r)),
+        Float32(static_cast<float>(g)),
+        Float32(static_cast<float>(b))
     };
+    return ldexp(rgb_f32, real_exponent - 9);
 }
 
 float4<Float16> encode_r16g16b16a16(float4<Float32> rgb)

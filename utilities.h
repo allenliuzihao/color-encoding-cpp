@@ -168,6 +168,17 @@ vector<T, N> max(vector<T, N> v, float maxValue)
     return result;
 }
 
+template<typename T, size_t N>
+vector<T, N> ldexp(vector<T, N> v, int exp)
+{
+    vector<T, N> result = {};
+    for (size_t i = 0; i < N; ++i)
+    {
+        result[i] = std::ldexpf((float)v[i], exp);
+    }
+    return result;
+}
+
 uint32_t asuint(float x);
 float asfloat(uint32_t x);
 
