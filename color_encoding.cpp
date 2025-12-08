@@ -4,10 +4,10 @@ uint32_t encode_rgb10a2_unorm(float4<Float32> rgba)
 {
     rgba = saturate(rgba);
 
-    uint32_t r = static_cast<uint32_t>(rgba.x * 1023.0f + 0.5f);
-    uint32_t g = static_cast<uint32_t>(rgba.y * 1023.0f + 0.5f);
-    uint32_t b = static_cast<uint32_t>(rgba.z * 1023.0f + 0.5f);
-    uint32_t a = static_cast<uint32_t>(rgba.w * 3.0f + 0.5f);
+    uint32_t r = static_cast<uint32_t>(rgba.x() * 1023.0f + 0.5f);
+    uint32_t g = static_cast<uint32_t>(rgba.y() * 1023.0f + 0.5f);
+    uint32_t b = static_cast<uint32_t>(rgba.z() * 1023.0f + 0.5f);
+    uint32_t a = static_cast<uint32_t>(rgba.w() * 3.0f + 0.5f);
 
     return r | (g << 10) | (b << 20) | (a << 30);
 }
@@ -31,9 +31,9 @@ uint32_t encode_r11g11b10(float3<Float32> rgb)
 {
     rgb = max<Float32>(rgb, 0.0f);
 
-    uint16_t r16 = Float16((float)rgb.x).raw() + 0x0008;
-    uint16_t g16 = Float16((float)rgb.y).raw() + 0x0008;
-    uint16_t b16 = Float16((float)rgb.z).raw() + 0x0010;
+    uint16_t r16 = Float16((float)rgb.x()).raw() + 0x0008;
+    uint16_t g16 = Float16((float)rgb.y()).raw() + 0x0008;
+    uint16_t b16 = Float16((float)rgb.z()).raw() + 0x0010;
 
     uint32_t result = 0;
     // r: 5 bits exponent, 6 bits mantissa
@@ -70,16 +70,17 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 
 float3<Float32> decode_r9g9b9e5(uint32_t encoded)
 {
-    return float3<Float32>{};
+    return float3<Float32>{
+    };
 }
 
 float4<Float16> encode_r16g16b16a16(float4<Float32> rgb)
 {
     float4<Float16> result = {
-        Float16((float)rgb.x),
-        Float16((float)rgb.y),
-        Float16((float)rgb.z),
-        Float16((float)rgb.w)
+        Float16((float)rgb.x()),
+        Float16((float)rgb.y()),
+        Float16((float)rgb.z()),
+        Float16((float)rgb.w())
     };
     return result;
 }
@@ -87,10 +88,10 @@ float4<Float16> encode_r16g16b16a16(float4<Float32> rgb)
 float4<Float32> decode_r16g16b16a16(float4<Float16> rgb)
 {
     float4 <Float32> result = {
-        Float32((float)rgb.x),
-        Float32((float)rgb.y),
-        Float32((float)rgb.z),
-        Float32((float)rgb.w)
+        Float32((float)rgb.x()),
+        Float32((float)rgb.y()),
+        Float32((float)rgb.z()),
+        Float32((float)rgb.w())
     };
     return result;
 }
