@@ -147,6 +147,17 @@ vector<T, N> saturate(vector<T, N> v)
 }
 
 template<typename T, size_t N>
+vector<T, N> clamp(vector<T, N> v, float minVal, float maxVal)
+{
+    vector<T, N> result = {};
+    for (int i = 0; i < N; ++i)
+    {
+        result[i] = std::clamp((float)v[i], minVal, maxVal);
+    }
+    return result;
+}
+
+template<typename T, size_t N>
 vector<T, N> min(vector<T, N> v, float minValue)
 {
     vector<T, N> result = {};

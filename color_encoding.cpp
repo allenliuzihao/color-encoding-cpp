@@ -64,8 +64,13 @@ float3<Float32> decode_r11g11b10(uint32_t encoded)
 
 uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 {
+    uint32_t result = 0;
+    uint16_t maxValue = 0x7bfc;
+    rgb = clamp(rgb, 0.0f, Float16(maxValue));
 
-    return 0;
+
+
+    return result;
 }
 
 float3<Float32> decode_r9g9b9e5(uint32_t encoded)
