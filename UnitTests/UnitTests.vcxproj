@@ -167,6 +167,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TestBinary.cpp" />
+    <ClCompile Include="TestFloatTypes.cpp" />
     <ClCompile Include="TestFP16cpp.cpp" />
     <ClCompile Include="TestFP32.cpp" />
   </ItemGroup>
