@@ -34,6 +34,11 @@ struct Float32
     {
          return value();
     }
+
+    inline bool operator==(const Float32& other) const
+    {
+        return u == other.u;
+    }
 };
 
 struct Float16
@@ -59,6 +64,11 @@ struct Float16
     inline operator float()
     {
         return value();
+    }
+
+    inline bool operator==(const Float32& other) const
+    {
+        return u == other.u;
     }
 
     void print() const;

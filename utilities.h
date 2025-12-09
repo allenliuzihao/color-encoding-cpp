@@ -240,6 +240,19 @@ vector<T, N> operator+(vector<T, N> x, vector<T, N> y)
     return result;
 }
 
+template<typename T, size_t N>
+bool operator==(vector<T, N> x, vector<T, N> y)
+{
+    for (size_t i = 0; i < N; ++i)
+    {
+        if (x[i] != y[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 uint32_t asuint(float x);
 float asfloat(uint32_t x);
 
