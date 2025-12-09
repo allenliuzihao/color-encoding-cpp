@@ -67,7 +67,7 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
     float minValue = Float16(uint16_t(0x0001)).value();
     float maxValue = Float16(uint16_t(0x7bfc)).value();
 
-    rgb = modify(rgb, [&](Float32& output, const Float32 &input) {
+    rgb = modify(rgb, [=](Float32& output, const Float32 &input) {
         if (input > 0)
         {
             output = std::clamp((float)input, minValue, maxValue);
@@ -76,18 +76,22 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 
     // find maximum channel
     Float32 maxChannel = maximum(rgb);
+    Float32 red = rgb.x(), green = rgb.y(), blue = rgb.z();
+
     // convert exponent from fp32 to fp9e5
-    int32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15;
+    uint32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15 + 1;
 
     // exponents for each channel
-    int32_t redShift = maxChannel.exponent - rgb.x().exponent;
-    int32_t greenShift = maxChannel.exponent - rgb.y().exponent;
-    int32_t blueShift = maxChannel.exponent - rgb.z().exponent;
+    uint16_t redShift = (maxChannel.exponent - red.exponent) + 1;
+    uint16_t greenShift = (maxChannel.exponent - green.exponent) + 1;
+    uint16_t blueShift = (maxChannel.exponent - blue.exponent) + 1;
 
+    // TODO: implement rounding, mantissa truncation, and encoding mantissa and exponents. 
+    uint32_t r_mantissa = (red.mantissa | 0x00800000) >> (15 + redShift);
+    uint32_t g_mantissa = (green.mantissa | 0x00800000) >> (15 + greenShift);
+    uint32_t b_mantissa = (blue.mantissa | 0x00800000) >> (15 + blueShift);
 
-
-    uint32_t result = 0;
-    return result;
+    return (maxChannelExponent << 27) | (b_mantissa << 18) | (g_mantissa << 9) | r_mantissa;
 }
 
 float3<Float32> decode_r9g9b9e5(uint32_t encoded)
