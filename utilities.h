@@ -129,10 +129,16 @@ struct vector
     }
 };
 
-template<typename T>
-using float3 = vector<T, 3>;
+struct Float32;
+struct Float16;
 
 template<typename T>
+concept AllowedFloat = std::is_same_v<T, Float32> || std::is_same_v<T, Float16>;
+
+template<AllowedFloat T>
+using float3 = vector<T, 3>;
+
+template<AllowedFloat T>
 using float4 = vector<T, 4>;
 
 template<typename T, size_t N>
