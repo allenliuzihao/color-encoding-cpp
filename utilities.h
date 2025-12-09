@@ -219,12 +219,23 @@ vector<T, N> ldexp(vector<T, N> v, int exp)
 }
 
 template<typename T, size_t N, typename Func>
-vector<T, N> modify(vector<T, N> v, Func func)
+bool any(vector<T, N> v, Func func)
+{
+    bool result = false;
+    for (size_t i = 0; i < N; ++i)
+    {
+        result = result || func(v[i]);
+    }
+    return result;
+}
+
+template<typename T, size_t N>
+vector<T, N> operator+(vector<T, N> x, vector<T, N> y)
 {
     vector<T, N> result = {};
     for (size_t i = 0; i < N; ++i)
     {
-        func(result[i], v[i]);
+        result[i] = x[i] + y[i];
     }
     return result;
 }

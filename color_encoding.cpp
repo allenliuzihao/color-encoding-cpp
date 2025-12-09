@@ -64,15 +64,8 @@ float3<Float32> decode_r11g11b10(uint32_t encoded)
 
 uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 {
-    float minValue = Float16(uint16_t(0x0001)).value();
     float maxValue = Float16(uint16_t(0x7bfc)).value();
-
-    rgb = modify(rgb, [=](Float32& output, const Float32 &input) {
-        if (input > 0)
-        {
-            output = std::clamp((float)input, minValue, maxValue);
-        }
-    });
+    rgb = clamp(rgb, 0.0f, maxValue);    
 
     // find maximum channel
     Float32 maxChannel = maximum(rgb);
@@ -86,11 +79,10 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
     uint16_t greenShift = (maxChannel.exponent - green.exponent) + 1;
     uint16_t blueShift = (maxChannel.exponent - blue.exponent) + 1;
 
-    // TODO: implement rounding, mantissa truncation, and encoding mantissa and exponents. 
-    uint32_t r_mantissa = (red.mantissa | 0x00800000) >> (15 + redShift);
-    uint32_t g_mantissa = (green.mantissa | 0x00800000) >> (15 + greenShift);
-    uint32_t b_mantissa = (blue.mantissa | 0x00800000) >> (15 + blueShift);
-
+    // implement rounding, mantissa truncation, and handle denormals
+    uint32_t r_mantissa = red.exponent == 0 ? 0 : ((red.raw() + 0x00004000) | 0x00800000) >> (15 + redShift);
+    uint32_t g_mantissa = green.exponent == 0 ? 0 : ((green.raw() + 0x00004000) | 0x00800000) >> (15 + greenShift);
+    uint32_t b_mantissa = blue.exponent == 0 ? 0 : ((blue.raw() + 0x00004000) | 0x00800000) >> (15 + blueShift);
     return (maxChannelExponent << 27) | (b_mantissa << 18) | (g_mantissa << 9) | r_mantissa;
 }
 
