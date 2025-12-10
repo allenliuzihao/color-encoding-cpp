@@ -253,6 +253,19 @@ bool operator==(vector<T, N> x, vector<T, N> y)
     return true;
 }
 
+template<typename T, size_t N>
+bool approxEqual(vector<T, N> x, vector<T, N> y, float epsilon = 1e-3)
+{
+    for (size_t i = 0; i < N; ++i)
+    {
+        if (std::abs((float)x[i] - (float)y[i]) > epsilon)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 uint32_t asuint(float x);
 float asfloat(uint32_t x);
 

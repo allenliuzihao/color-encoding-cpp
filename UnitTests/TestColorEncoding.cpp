@@ -53,35 +53,28 @@ namespace UnitTests
             float3<Float32> decoded = decode_r11g11b10(encode_r11g11b10(expected));
             Assert::IsTrue(expected == decoded);
 
-            // Test with a range of values, including edge cases
-            struct TestCase
-            {
-                float r, g, b;
-            } testCases[] = {
-                {1.0f, 1.0f, 1.0f},         // max
-                {0.0f, 0.0f, 0.0f},         // min
-                {0.5f, 0.5f, 0.5f},         // mid
-                {0.33f, 0.5f, 0.332f},      // arbitrary
-                {65504.0f, 65504.0f, 65504.0f}, // largest float16
-                {1e-5f, 2e-5f, 3e-5f},      // small values
-            };
+            expected = { 1.0f, 1.0f, 1.0f };
+            decoded = decode_r11g11b10(encode_r11g11b10(expected));
+            Assert::IsTrue(expected == decoded);
 
-            for (const auto& tc : testCases)
-            {
-                float3<Float32> input = { tc.r, tc.g, tc.b };
-                uint32_t encoded = encode_r11g11b10(input);
-                float3<Float32> decoded = decode_r11g11b10(encoded);
+            expected = { 0.0f, 0.0f, 0.0f };
+            decoded = decode_r11g11b10(encode_r11g11b10(expected));
+            Assert::IsTrue(expected == decoded);
 
-                float x = decoded.x();
-                float y = decoded.y();
-                float z = decoded.z();
+            expected = { 0.5f, 0.5f, 0.5f };
+            decoded = decode_r11g11b10(encode_r11g11b10(expected));
+            Assert::IsTrue(expected == decoded);
 
-                // Allow a small epsilon due to quantization
-                float epsilon = 1e-3f; // R/G: 11 bits, B: 10 bits
-                //Assert::IsTrue(std::abs(input.x() - decoded.x()) <= epsilon);
-                //Assert::IsTrue(std::abs(input.y() - decoded.y()) <= epsilon);
-                //Assert::IsTrue(std::abs(input.z() - decoded.z()) <= epsilon);
-            }
+            expected = { 65504.0f, 65504.0f, 65504.0f };
+            decoded = decode_r11g11b10(encode_r11g11b10(expected));
+            Assert::IsTrue(std::isinf(decoded.x()) && std::isinf(decoded.y()) && std::isinf(decoded.z()));
+
+            expected = { 1e-5f, 2e-5f, 3e-5f };
+            decoded = decode_r11g11b10(encode_r11g11b10(expected));
+            float x = decoded.x();
+            float y = decoded.y();
+            float z = decoded.z();
+            Assert::IsTrue(approxEqual(expected, decoded, 1e-5));
         }
 
         TEST_METHOD(TestR10G10B10A2)
