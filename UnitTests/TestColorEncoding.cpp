@@ -86,12 +86,48 @@ namespace UnitTests
 
         TEST_METHOD(TestR10G10B10A2)
         {
+            // Basic round-trip test
+            float4<Float32> input = { 1.0f, 0.5f, 0.25f, 1.0f };
+            float4<Float32> decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
 
+            // Test with minimum values
+            input = { 0.0f, 0.0f, 0.0f, 0.0f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
+            // Test with mid-range values
+            input = { 0.5f, 0.5f, 0.5f, 0.5f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
+            // Test with values that are not exactly representable
+            input = { 0.33f, 0.66f, 0.99f, 0.25f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            // The expected values are the nearest representable values in 10/2 bit UNORM
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
+            // Test with out-of-range values (should be clamped)
+            input = { -1.0f, 2.0f, 0.5f, 5.0f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
         }
 
         TEST_METHOD(TestR9G9B9E5)
         {
 
+        }
+    private:
+        float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
+        {
+            rgba = saturate(rgba);
+
+            return float4<Float32>{
+                std::round(rgba.x() * 1023.0f) / 1023.0f,
+                std::round(rgba.y() * 1023.0f) / 1023.0f,
+                std::round(rgba.z() * 1023.0f) / 1023.0f,
+                std::round(rgba.w() * 3.0f) / 3.0f
+            };
         }
     };
 }
