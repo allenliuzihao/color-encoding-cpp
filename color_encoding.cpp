@@ -27,7 +27,6 @@ float4<Float32> decode_rgb10a2_unorm(uint32_t encoded)
     return result;
 }
 
-// TODO: Optimize these functions to avoid using Float16 conversions
 uint32_t encode_r11g11b10(float3<Float32> rgb)
 {
     rgb = max(rgb, 0.0f);

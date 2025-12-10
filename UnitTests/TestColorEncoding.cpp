@@ -49,6 +49,7 @@ namespace UnitTests
 
         TEST_METHOD(TestR11G11B10)
         {
+            float3<Float32> input = { 0.0f, 0.0f, 0.0f };
             float3<Float32> expected = { 1.0f, 0.5f, 0.25f };
             float3<Float32> decoded = decode_r11g11b10(encode_r11g11b10(expected));
             Assert::IsTrue(expected == decoded);
@@ -71,10 +72,16 @@ namespace UnitTests
 
             expected = { 1e-5f, 2e-5f, 3e-5f };
             decoded = decode_r11g11b10(encode_r11g11b10(expected));
-            float x = decoded.x();
-            float y = decoded.y();
-            float z = decoded.z();
             Assert::IsTrue(approxEqual(expected, decoded, 1e-5));
+
+            input = { 10.32f, 0.001f, 23.f };
+            expected = { 10.375f, 0.001f, 23.f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            Assert::IsTrue(approxEqual(expected, decoded));
+
+            input = { 0.33f, 0.66f, 0.99f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-2));
         }
 
         TEST_METHOD(TestR10G10B10A2)
