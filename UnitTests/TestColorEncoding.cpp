@@ -82,6 +82,16 @@ namespace UnitTests
             input = { 0.33f, 0.66f, 0.99f };
             decoded = decode_r11g11b10(encode_r11g11b10(input));
             Assert::IsTrue(approxEqual(input, decoded, 1e-2));
+
+            input = { 4.32f, 6.1f, 0.11f };
+            expected = { 4.3125f, 6.125f, 0.109375f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            Assert::IsTrue(decoded == expected);
+
+            input = { -1.0f, 2.0f, 0.5f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            expected = { 0.0f, 2.0f, 0.5f };
+            Assert::IsTrue(decoded == expected);
         }
 
         TEST_METHOD(TestR10G10B10A2)
