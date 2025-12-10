@@ -92,6 +92,36 @@ namespace UnitTests
             decoded = decode_r11g11b10(encode_r11g11b10(input));
             expected = { 0.0f, 2.0f, 0.5f };
             Assert::IsTrue(decoded == expected);
+
+            // Channel-specific edge cases
+            input = { 1.0f, 0.0f, 0.0f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            expected = { 1.0f, 0.0f, 0.0f };
+            Assert::IsTrue(decoded == expected);
+
+            input = { 0.0f, 1.0f, 0.0f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            expected = { 0.0f, 1.0f, 0.0f };
+            Assert::IsTrue(decoded == expected);
+
+            input = { 0.0f, 0.0f, 1.0f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            expected = { 0.0f, 0.0f, 1.0f };
+            Assert::IsTrue(decoded == expected);
+
+            // Test with values just below and above quantization thresholds
+            input = { 0.499f, 0.501f, 0.249f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-2));
+
+            input = { 0.999f, 0.001f, 0.751f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-3));
+
+            input = { 77.23f, 98.88f, 502.2f };
+            decoded = decode_r11g11b10(encode_r11g11b10(input));
+            expected = { 77.0f, 99.0f, 504.0f };
+            Assert::IsTrue(decoded == expected);
         }
 
         TEST_METHOD(TestR10G10B10A2)
