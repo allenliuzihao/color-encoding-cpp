@@ -107,6 +107,26 @@ namespace UnitTests
             // The expected values are the nearest representable values in 10/2 bit UNORM
             Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
 
+            input = { 0.33f, 0.26f, 0.99f, 0.1f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            // The expected values are the nearest representable values in 10/2 bit UNORM
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
+            input = { 0.23f, 0.66f, 0.99f, 0.33f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            // The expected values are the nearest representable values in 10/2 bit UNORM
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
+            input = { 0.23f, 0.66f, 0.99f, 0.78f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            // The expected values are the nearest representable values in 10/2 bit UNORM
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
+            input = { 0.23f, 0.66f, 0.99f, 0.83f };
+            decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
+            // The expected values are the nearest representable values in 10/2 bit UNORM
+            Assert::IsTrue(GetExpectedR10G10B10A2(input) == decoded);
+
             // Test with out-of-range values (should be clamped)
             input = { -1.0f, 2.0f, 0.5f, 5.0f };
             decoded = decode_rgb10a2_unorm(encode_rgb10a2_unorm(input));
