@@ -208,6 +208,11 @@ namespace UnitTests
             input = { 57344.0f, 57344.0f, 57344.0f };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
             Assert::IsTrue(input == decoded);
+
+            // values exceeding maximum representable value should be clamped
+            input = { 60000.0f, 70000.0f, 80000.0f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(decoded == float3<Float32>{ 60032.0f, 65408.f, 65408.f });
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
