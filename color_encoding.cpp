@@ -77,8 +77,12 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
     Float32 red = rgb.x(), green = rgb.y(), blue = rgb.z();
 
     // convert exponent from fp32 to fp9e5
-    uint32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15 + 1;
-
+    int32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15 + 1;
+    if (maxChannelExponent < 0)
+    {
+        return 0; // all channels are too small, encode as zero
+    } 
+    
     // exponents for each channel
     uint16_t redShift = (maxChannel.exponent - red.exponent);
     uint16_t greenShift = (maxChannel.exponent - green.exponent);
@@ -88,7 +92,7 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
     uint32_t r_mantissa = (red.exponent == 0 ? 0 : round_and_get_mantissa(red.raw(), redShift));
     uint32_t g_mantissa = (green.exponent == 0 ? 0 : round_and_get_mantissa(green.raw(), greenShift));
     uint32_t b_mantissa = (blue.exponent == 0 ? 0 : round_and_get_mantissa(blue.raw(), blueShift));
-    return  r_mantissa | (g_mantissa << 9) | (b_mantissa << 18) | (maxChannelExponent << 27);
+    return  r_mantissa | (g_mantissa << 9) | (b_mantissa << 18) | (uint32_t(maxChannelExponent) << 27);
 }
 
 float3<Float32> decode_r9g9b9e5(uint32_t encoded)

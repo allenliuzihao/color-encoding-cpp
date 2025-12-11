@@ -177,10 +177,15 @@ namespace UnitTests
         {
             float3<Float32> input = { 1.0f, 0.5f, 0.25f };
             float3<Float32> decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(input == decoded);
+
+            // check denormals and small values are rounded to zero
+            input = { 1e-8f, 0.0f, 0.0f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
             float x = decoded.x();
             float y = decoded.y();
             float z = decoded.z();
-            Assert::IsTrue(input == decoded);
+            Assert::IsTrue(decoded == float3<Float32>{ 0.0f, 0.0f, 0.0f });
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
