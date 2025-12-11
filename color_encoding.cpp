@@ -62,6 +62,11 @@ float3<Float32> decode_r11g11b10(uint32_t encoded)
     };
 }
 
+static inline uint32_t round_and_get_mantissa(uint32_t color_channel, uint16_t shifts)
+{
+    return (((color_channel + 0x00004000) | 0x00800000) & 0x00ff8000) >> (15 + shifts);
+}
+
 uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 {
     float maxValue = Float16(uint16_t(0x7bfc)).value();
@@ -75,15 +80,15 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
     uint32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15 + 1;
 
     // exponents for each channel
-    uint16_t redShift = (maxChannel.exponent - red.exponent) + 1;
-    uint16_t greenShift = (maxChannel.exponent - green.exponent) + 1;
-    uint16_t blueShift = (maxChannel.exponent - blue.exponent) + 1;
+    uint16_t redShift = (maxChannel.exponent - red.exponent);
+    uint16_t greenShift = (maxChannel.exponent - green.exponent);
+    uint16_t blueShift = (maxChannel.exponent - blue.exponent);
 
     // implement rounding, mantissa truncation, and handle denormals
-    uint32_t r_mantissa = red.exponent == 0 ? 0 : ((red.raw() + 0x00004000) | 0x00800000) >> (15 + redShift);
-    uint32_t g_mantissa = green.exponent == 0 ? 0 : ((green.raw() + 0x00004000) | 0x00800000) >> (15 + greenShift);
-    uint32_t b_mantissa = blue.exponent == 0 ? 0 : ((blue.raw() + 0x00004000) | 0x00800000) >> (15 + blueShift);
-    return (maxChannelExponent << 27) | (b_mantissa << 18) | (g_mantissa << 9) | r_mantissa;
+    uint32_t r_mantissa = (red.exponent == 0 ? 0 : round_and_get_mantissa(red.raw(), redShift));
+    uint32_t g_mantissa = (green.exponent == 0 ? 0 : round_and_get_mantissa(green.raw(), greenShift));
+    uint32_t b_mantissa = (blue.exponent == 0 ? 0 : round_and_get_mantissa(blue.raw(), blueShift));
+    return  r_mantissa | (g_mantissa << 9) | (b_mantissa << 18) | (maxChannelExponent << 27);
 }
 
 float3<Float32> decode_r9g9b9e5(uint32_t encoded)

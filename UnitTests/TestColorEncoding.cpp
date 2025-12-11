@@ -175,7 +175,12 @@ namespace UnitTests
 
         TEST_METHOD(TestR9G9B9E5)
         {
-
+            float3<Float32> input = { 1.0f, 0.5f, 0.25f };
+            float3<Float32> decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            float x = decoded.x();
+            float y = decoded.y();
+            float z = decoded.z();
+            Assert::IsTrue(input == decoded);
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
