@@ -213,6 +213,11 @@ namespace UnitTests
             input = { 60000.0f, 70000.0f, 80000.0f };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
             Assert::IsTrue(decoded == float3<Float32>{ 60032.0f, 65408.f, 65408.f });
+
+            // a mix of really large and really small values
+            input = { 1e-8f, 1e4f, 1e8f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(float3<Float32>{ 0.0f, 9984.f, 65408.f } == decoded);
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
