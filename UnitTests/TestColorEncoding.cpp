@@ -223,6 +223,15 @@ namespace UnitTests
             input = { 1e-5f, 2e-5f, 3e-5f };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
             Assert::IsTrue(approxEqual(float3<Float32>{ 0.0f, 0.0f, 0.0f }, decoded));
+
+            // small values representable in R9G9B9E5
+            input = { 0.0009765625f, 0.001953125f, 0.00390625f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-6f));
+
+            input = { -1.0f, 2.0f, 0.5f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(approxEqual(float3<Float32>{ 0.0f, 2.0f, 0.5f }, decoded, 1e-6f));
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
