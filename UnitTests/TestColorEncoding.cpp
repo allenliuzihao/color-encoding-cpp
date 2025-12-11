@@ -202,10 +202,12 @@ namespace UnitTests
 
             input = { 77.23f, 98.88f, 502.2f };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
-            float x = decoded.x();
-            float y = decoded.y();
-            float z = decoded.z();
             Assert::IsTrue(approxEqual(input, decoded, 1e1));
+
+            // maximum representable value of R9G9B9E5
+            input = { 57344.0f, 57344.0f, 57344.0f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(input == decoded);
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
