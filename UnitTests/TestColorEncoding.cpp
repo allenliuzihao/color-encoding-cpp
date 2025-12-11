@@ -72,7 +72,7 @@ namespace UnitTests
 
             expected = { 1e-5f, 2e-5f, 3e-5f };
             decoded = decode_r11g11b10(encode_r11g11b10(expected));
-            Assert::IsTrue(approxEqual(expected, decoded, 1e-5));
+            Assert::IsTrue(approxEqual(expected, decoded, 1e-5f));
 
             input = { 10.32f, 0.001f, 23.f };
             expected = { 10.375f, 0.001f, 23.f };
@@ -81,7 +81,7 @@ namespace UnitTests
 
             input = { 0.33f, 0.66f, 0.99f };
             decoded = decode_r11g11b10(encode_r11g11b10(input));
-            Assert::IsTrue(approxEqual(input, decoded, 1e-2));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-2f));
 
             input = { 4.32f, 6.1f, 0.11f };
             expected = { 4.3125f, 6.125f, 0.109375f };
@@ -112,11 +112,11 @@ namespace UnitTests
             // Test with values just below and above quantization thresholds
             input = { 0.499f, 0.501f, 0.249f };
             decoded = decode_r11g11b10(encode_r11g11b10(input));
-            Assert::IsTrue(approxEqual(input, decoded, 1e-2));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-2f));
 
             input = { 0.999f, 0.001f, 0.751f };
             decoded = decode_r11g11b10(encode_r11g11b10(input));
-            Assert::IsTrue(approxEqual(input, decoded, 1e-3));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-3f));
 
             input = { 77.23f, 98.88f, 502.2f };
             decoded = decode_r11g11b10(encode_r11g11b10(input));
@@ -232,6 +232,19 @@ namespace UnitTests
             input = { -1.0f, 2.0f, 0.5f };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
             Assert::IsTrue(approxEqual(float3<Float32>{ 0.0f, 2.0f, 0.5f }, decoded, 1e-6f));
+
+            // smallest values representable in R9G9B9E5
+            float minValue = ldexpf(1.0, -24);
+            input = { minValue, minValue, minValue };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(input == decoded);
+
+            // values just below smallest representable in R9G9B9E5 should round to zero
+            input = { minValue * 0.9f, minValue * 0.9f, minValue * 0.9f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(float3<Float32>{ 0.0f, 0.0f, 0.0f } == decoded);
+
+
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
