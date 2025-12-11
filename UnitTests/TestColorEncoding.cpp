@@ -195,6 +195,17 @@ namespace UnitTests
             input = { 1e-8f, 10.31f, 41.2f };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
             Assert::IsTrue(approxEqual(float3<Float32>{ 0.0f, 10.31f, 41.2f }, decoded, 1e-1f));
+
+            input = { 0.33f, 0.66f, 0.99f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(approxEqual(input, decoded, 1e-2f));
+
+            input = { 77.23f, 98.88f, 502.2f };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            float x = decoded.x();
+            float y = decoded.y();
+            float z = decoded.z();
+            Assert::IsTrue(approxEqual(input, decoded, 1e1));
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
