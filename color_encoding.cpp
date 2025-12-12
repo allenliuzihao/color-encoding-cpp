@@ -79,14 +79,9 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
     Float32 red = rgb.x(), green = rgb.y(), blue = rgb.z();
 
     // convert exponent from fp32 to fp9e5
-    // TODO: bugs when handling small values
     int32_t maxChannelExponent = int32_t(maxChannel.exponent) - 127 + 15 + 1;
     int32_t shiftsAmount = 0;
-    if (maxChannelExponent < -8)
-    {
-        return 0;
-    }
-    else if (maxChannelExponent < 0)
+    if (maxChannelExponent < 0)
     {
         shiftsAmount = -maxChannelExponent;
         maxChannelExponent = 0;
