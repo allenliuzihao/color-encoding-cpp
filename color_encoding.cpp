@@ -64,7 +64,7 @@ float3<Float32> decode_r11g11b10(uint32_t encoded)
 
 static inline uint32_t round_and_get_mantissa(uint32_t color_channel, uint16_t shifts)
 {
-    uint32_t term = ((color_channel + 0x00004000) | 0x00800000) & 0x00ff8000;
+    uint32_t term = (color_channel | 0x00800000) & 0x00ff8000;
     shifts += 15;
     return shifts >= 32 ? 0 : (term >> shifts);
 }
@@ -73,6 +73,11 @@ uint32_t encode_r9g9b9e5(float3<Float32> rgb)
 {
     float maxValue = Float16(uint16_t(0x7bfc)).value();
     rgb = clamp(rgb, 0.0f, maxValue);    
+
+    // add bias for rounding
+    rgb[0].u += 0x00004000;
+    rgb[1].u += 0x00004000;
+    rgb[2].u += 0x00004000;
 
     // find maximum channel
     Float32 maxChannel = maximum(rgb);

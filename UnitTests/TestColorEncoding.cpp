@@ -266,12 +266,23 @@ namespace UnitTests
                     float val = ldexpf(static_cast<float>(mantissa), exp - 9);
                     input = { val, val, val };
                     decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
-                    float x = decoded.x();
-                    float y = decoded.y();
-                    float z = decoded.z();
                     Assert::IsTrue(input == decoded);
                 }
             }
+
+            // finally check rounding behavior for values between representable values
+            float no_rounding = asfloat(0x3fff8000);
+            input = { no_rounding, no_rounding, no_rounding };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            Assert::IsTrue(input == decoded);
+
+            float rounding_up = asfloat(0x3fffc000);
+            input = { rounding_up, rounding_up, rounding_up };
+            decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+            float x = decoded.x();
+            float y = decoded.y();
+            float z = decoded.z();
+            Assert::IsTrue(decoded == float3<Float32>{ 2.0f, 2.0f, 2.0f });
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
