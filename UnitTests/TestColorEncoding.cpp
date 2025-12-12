@@ -256,6 +256,22 @@ namespace UnitTests
                 float z = decoded.z();
                 Assert::IsTrue(input == decoded);
             }
+
+            // exhaustive test for a range of exponents and mantissas
+            // these cover all representable values in R9G9B9E5
+            for (int16_t exp = -14; exp <= 16; ++exp)
+            {
+                for (uint16_t mantissa = 0; mantissa < 512; ++mantissa) // step to reduce test time
+                {
+                    float val = ldexpf(static_cast<float>(mantissa), exp - 9);
+                    input = { val, val, val };
+                    decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
+                    float x = decoded.x();
+                    float y = decoded.y();
+                    float z = decoded.z();
+                    Assert::IsTrue(input == decoded);
+                }
+            }
         }
     private:
         float4<Float32> GetExpectedR10G10B10A2(float4<Float32> rgba)
