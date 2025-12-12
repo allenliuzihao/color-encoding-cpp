@@ -279,9 +279,6 @@ namespace UnitTests
             float rounding_up = asfloat(0x3fffc000);
             input = { rounding_up, rounding_up, rounding_up };
             decoded = decode_r9g9b9e5(encode_r9g9b9e5(input));
-            float x = decoded.x();
-            float y = decoded.y();
-            float z = decoded.z();
             Assert::IsTrue(decoded == float3<Float32>{ 2.0f, 2.0f, 2.0f });
         }
     private:
